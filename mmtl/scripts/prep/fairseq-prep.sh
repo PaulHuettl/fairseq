@@ -1,4 +1,4 @@
-data="$HOME/DL/MTL/data"
+data="$BASE/data"
 model_name=$1
 dataset=$2
 src=$3

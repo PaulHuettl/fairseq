@@ -1,4 +1,6 @@
-data='/home/phuettl/DL/MTL/data'
+source .env
+
+data="$BASE/data"
 tatoeba_raw="$data/raw/tatoeba"
 
 mkdir $tatoeba_raw

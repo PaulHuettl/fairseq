@@ -1,12 +1,13 @@
-data=/home/phuettl/DL/MTL/data/bin
-checkpoint=/home/phuettl/DL/MTL/data/checkpoint
+source .env
 
-src=en
-tgt=de
-lang_pairs="de-fr,fr-de,en-de,de-en,en-ja,ja-en,zh-en,en-zh"
+data=$BASE/data/bin
+
+src='en'
+tgt='de'
+lang_pairs='de-fr,fr-de,en-de,de-en,en-ja,ja-en,zh-en,en-zh'
 
 fairseq-generate $data \
-  --path $checkpoint/checkpoint_best.pt \
+  --path $CHECKPOINT/checkpoint_best.pt \
   --task multilingual_translation \
   --gen-subset test \
   --source-lang $src \

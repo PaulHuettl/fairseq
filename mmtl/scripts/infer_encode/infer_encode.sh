@@ -1,6 +1,7 @@
-SPM="$HOME/DL/sentencepiece/build/src"
-data="$HOME/DL/MTL/data"
-model_name='multi_spm'
+source .env
+
+data="$BASE/data"
+model_name='MMTL_spm'
 mode=$1
 dataset=$2
 src=$3

@@ -1,34 +1,27 @@
 #! /usr/bin/bash
 
-# TODO:
-# scp -r Downloads/flores200_dataset r100:/home/phuettl/DL/MTL/data/raw
-
 # used languages
-# German (DE)
-# English (EN)
-# French (FR)
-# Japanese (JA)
-# Chinese (ZH)
+# German
+# English
+# French
+# Japanese
+# Chinese
 
-# unavailable in wmt21
-# Korean (KO)
-# Portuguese (PT)
-# Swahili (SW)
-# Italian (IT)
-# Spanish (ES)
-base='/home/phuettl/DL/MTL'
-mkdir $base/data
-mkdir $base/data/raw
+source .env
 
-data="$base/data/raw/flores200_dataset"
+
+mkdir $BASE/data
+mkdir $BASE/data/raw
+
+data="$BASE/data/raw/flores200_dataset"
 
 declare -a lang=('deu_Latn'
                     'eng_Latn' 'fra_Latn'
                     'jpn_Jpan'
                     'zho_Hant')
 
-output_dev="$base/data/raw/flores_dev"
-output_devtest="$base/data/raw/flores_devtest"
+output_dev="$BASE/data/raw/flores-dev"
+output_devtest="$BASE/data/raw/flores-devtest"
 mkdir $output_dev
 mkdir $output_devtest
 

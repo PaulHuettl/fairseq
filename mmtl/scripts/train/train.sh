@@ -1,8 +1,9 @@
-data=/home/phuettl/DL/MTL/data/bin
-checkpoint=/home/phuettl/DL/MTL/data/checkpoint
-mkdir $checkpoint
+source .env
 
-CUDA_VISIBLE_DEVICES=2 fairseq-train $data/wmt21 $data/tatoeba \
+data=$BASE/data/bin
+mkdir $CHECKPOINT
+
+CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES fairseq-train $data/wmt21 $data/tatoeba \
     --arch multilingual_transformer \
     --task multilingual_translation \
     --lang-pairs "de-fr,fr-de,en-de,de-en,en-ja,ja-en,zh-en,en-zh" \
@@ -25,11 +26,11 @@ CUDA_VISIBLE_DEVICES=2 fairseq-train $data/wmt21 $data/tatoeba \
     --decoder-embed-dim 512 \
     --max-update 150000 \
     --max-epoch 100 \
-    --distributed-world-size 1 \
+    --distributed-world-size $DISTRIBUTED_WORLD_SIZE \
     --distributed-port 54186 \
     --fp16 \
     --max-source-positions 10000 \
     --max-target-positions 10000 \
-    --save-dir $checkpoint \
+    --save-dir $CHECKPOINT \
     --seed 1 \
     --save-interval 1

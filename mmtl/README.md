@@ -187,11 +187,19 @@ language specific loop
 The exact same modification needs also to be done in `valid_step`.
 
 Finally, in order to arrive at the correct application of the trained model during generation we also need to modify the `_main` in `fairseq/fairseq_cli/generate.py`. The generation is performed for a single `lang_pair`
-so naturally after this `lang_pair`is determined we introduce the dynamic attribut
+so naturally after this `lang_pair`is determined we introduce the dynamic attribute before the model is loaded.
 
 ```python
     lang_pair = cfg.task.source_lang + "-" + cfg.task.target_lang
     LanguageSpecificEncoderLayer.lang_pair = property(lambda self: lang_pair)
+    models, saved_cfg = checkpoint_utils.load_model_ensemble(
+        utils.split_paths(cfg.common_eval.path),
+        arg_overrides=overrides,
+        task=task,
+        suffix=cfg.checkpoint.checkpoint_suffix,
+        strict=(cfg.checkpoint.checkpoint_shard_count == 1),
+        num_shards=cfg.checkpoint.checkpoint_shard_count,
+    )
 ```
 
 After applying these changes we are in the position to train and generate from the model.

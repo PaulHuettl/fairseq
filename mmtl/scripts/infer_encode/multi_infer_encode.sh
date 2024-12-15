@@ -1,5 +1,6 @@
+source .env
 
-script="$HOME/DL/MTL/scripts/infer_encode/infer_encode.sh"
+script="$BASE/scripts/infer_encode/infer_encode.sh"
 declare -a pairs=('de-fr' 'fr-de'
                 'en-de' 'de-en'
                 'en-ja' 'ja-en'
@@ -22,12 +23,3 @@ do
     bash $script 'test' 'flores-devtest' $src $tgt
 
 done
-
-# bash $HOME/DL/MTL/scripts/infer_encode/infer_encode.sh 'train' 'tatoeba' 'de' 'fr'
-# bash $HOME/DL/MTL/scripts/infer_encode/infer_encode.sh 'train' 'tatoeba' 'fr' 'de'
-# bash $HOME/DL/MTL/scripts/infer_encode/infer_encode.sh 'train' 'tatoeba' 'en' 'de'
-# bash $HOME/DL/MTL/scripts/infer_encode/infer_encode.sh 'train' 'tatoeba' 'de' 'en'
-# bash $HOME/DL/MTL/scripts/infer_encode/infer_encode.sh 'train' 'tatoeba' 'en' 'ja'
-# bash $HOME/DL/MTL/scripts/infer_encode/infer_encode.sh 'train' 'tatoeba' 'ja' 'en'
-# bash $HOME/DL/MTL/scripts/infer_encode/infer_encode.sh 'train' 'tatoeba' 'zh' 'en'
-# bash $HOME/DL/MTL/scripts/infer_encode/infer_encode.sh 'train' 'tatoeba' 'en' 'zh'

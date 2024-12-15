@@ -1,4 +1,6 @@
-script="$HOME/DL/MTL/scripts/prep/fairseq-prep.sh"
+source .env
+
+script="$BASE/scripts/prep/fairseq-prep.sh"
 declare -a pairs=('de-fr' 'fr-de'
                 'en-de' 'de-en'
                 'en-ja' 'ja-en'

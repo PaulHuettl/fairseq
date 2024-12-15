@@ -1,6 +1,7 @@
-SPM="$HOME/DL/sentencepiece/build/src"
-data="$HOME/DL/MTL/data"
-output_dir="$HOME/DL/MTL/data/model_vocab"
+source .env
+
+data="$BASE/data"
+output_dir="$BASE/data/model_vocab"
 declare -a datasets=('wmt21' 'tatoeba')
 model_name="MMTL_spm"
 
