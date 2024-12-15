@@ -1,242 +1,211 @@
-<p align="center">
-  <img src="docs/fairseq_logo.png" width="150">
-  <br />
-  <br />
-  <a href="https://opensource.fb.com/support-ukraine"><img alt="Support Ukraine" src="https://img.shields.io/badge/Support-Ukraine-FFD500?style=flat&labelColor=005BBB" /></a>
-  <a href="https://github.com/pytorch/fairseq/blob/main/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
-  <a href="https://github.com/pytorch/fairseq/releases"><img alt="Latest Release" src="https://img.shields.io/github/release/pytorch/fairseq.svg" /></a>
-  <a href="https://github.com/pytorch/fairseq/actions?query=workflow:build"><img alt="Build Status" src="https://github.com/pytorch/fairseq/workflows/build/badge.svg" /></a>
-  <a href="https://fairseq.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/fairseq/badge/?version=latest" /></a>
-  <a href="https://app.circleci.com/pipelines/github/facebookresearch/fairseq/"><img alt="CicleCI Status" src="https://circleci.com/gh/facebookresearch/fairseq.svg?style=shield" /></a>
-</p>
+# Case study for learning language-specific layers in MMTL
 
---------------------------------------------------------------------------------
+In this case study I am basically reproducing 
 
-Fairseq(-py) is a sequence modeling toolkit that allows researchers and
-developers to train custom models for translation, summarization, language
-modeling and other text generation tasks.
-
-We provide reference implementations of various sequence modeling papers:
-
-<details><summary>List of implemented papers</summary><p>
-
-* **Convolutional Neural Networks (CNN)**
-  + [Language Modeling with Gated Convolutional Networks (Dauphin et al., 2017)](examples/language_model/conv_lm/README.md)
-  + [Convolutional Sequence to Sequence Learning (Gehring et al., 2017)](examples/conv_seq2seq/README.md)
-  + [Classical Structured Prediction Losses for Sequence to Sequence Learning (Edunov et al., 2018)](https://github.com/pytorch/fairseq/tree/classic_seqlevel)
-  + [Hierarchical Neural Story Generation (Fan et al., 2018)](examples/stories/README.md)
-  + [wav2vec: Unsupervised Pre-training for Speech Recognition (Schneider et al., 2019)](examples/wav2vec/README.md)
-* **LightConv and DynamicConv models**
-  + [Pay Less Attention with Lightweight and Dynamic Convolutions (Wu et al., 2019)](examples/pay_less_attention_paper/README.md)
-* **Long Short-Term Memory (LSTM) networks**
-  + Effective Approaches to Attention-based Neural Machine Translation (Luong et al., 2015)
-* **Transformer (self-attention) networks**
-  + Attention Is All You Need (Vaswani et al., 2017)
-  + [Scaling Neural Machine Translation (Ott et al., 2018)](examples/scaling_nmt/README.md)
-  + [Understanding Back-Translation at Scale (Edunov et al., 2018)](examples/backtranslation/README.md)
-  + [Adaptive Input Representations for Neural Language Modeling (Baevski and Auli, 2018)](examples/language_model/README.adaptive_inputs.md)
-  + [Lexically constrained decoding with dynamic beam allocation (Post & Vilar, 2018)](examples/constrained_decoding/README.md)
-  + [Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context (Dai et al., 2019)](examples/truncated_bptt/README.md)
-  + [Adaptive Attention Span in Transformers (Sukhbaatar et al., 2019)](examples/adaptive_span/README.md)
-  + [Mixture Models for Diverse Machine Translation: Tricks of the Trade (Shen et al., 2019)](examples/translation_moe/README.md)
-  + [RoBERTa: A Robustly Optimized BERT Pretraining Approach (Liu et al., 2019)](examples/roberta/README.md)
-  + [Facebook FAIR's WMT19 News Translation Task Submission (Ng et al., 2019)](examples/wmt19/README.md)
-  + [Jointly Learning to Align and Translate with Transformer Models (Garg et al., 2019)](examples/joint_alignment_translation/README.md )
-  + [Multilingual Denoising Pre-training for Neural Machine Translation (Liu et at., 2020)](examples/mbart/README.md)
-  + [Neural Machine Translation with Byte-Level Subwords (Wang et al., 2020)](examples/byte_level_bpe/README.md)
-  + [Unsupervised Quality Estimation for Neural Machine Translation (Fomicheva et al., 2020)](examples/unsupervised_quality_estimation/README.md)
-  + [wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations (Baevski et al., 2020)](examples/wav2vec/README.md)
-  + [Generating Medical Reports from Patient-Doctor Conversations Using Sequence-to-Sequence Models (Enarvi et al., 2020)](examples/pointer_generator/README.md)
-  + [Linformer: Self-Attention with Linear Complexity (Wang et al., 2020)](examples/linformer/README.md)
-  + [Cross-lingual Retrieval for Iterative Self-Supervised Training (Tran et al., 2020)](examples/criss/README.md)
-  + [Deep Transformers with Latent Depth (Li et al., 2020)](examples/latent_depth/README.md)
-  + [Unsupervised Cross-lingual Representation Learning for Speech Recognition (Conneau et al., 2020)](https://arxiv.org/abs/2006.13979)
-  + [Self-training and Pre-training are Complementary for Speech Recognition (Xu et al., 2020)](https://arxiv.org/abs/2010.11430)
-  + [Robust wav2vec 2.0: Analyzing Domain Shift in Self-Supervised Pre-Training (Hsu, et al., 2021)](https://arxiv.org/abs/2104.01027)
-  + [Unsupervised Speech Recognition (Baevski, et al., 2021)](https://arxiv.org/abs/2105.11084)
-  + [Simple and Effective Zero-shot Cross-lingual Phoneme Recognition (Xu et al., 2021)](https://arxiv.org/abs/2109.11680)
-  + [VideoCLIP: Contrastive Pre-training for Zero-shot Video-Text Understanding (Xu et. al., 2021)](https://arxiv.org/pdf/2109.14084.pdf)
-  + [VLM: Task-agnostic Video-Language Model Pre-training for Video Understanding (Xu et. al., 2021)](https://aclanthology.org/2021.findings-acl.370.pdf)
-  + [NormFormer: Improved Transformer Pretraining with Extra Normalization (Shleifer et. al, 2021)](examples/normformer/README.md)
-* **Non-autoregressive Transformers**
-  + Non-Autoregressive Neural Machine Translation (Gu et al., 2017)
-  + Deterministic Non-Autoregressive Neural Sequence Modeling by Iterative Refinement (Lee et al. 2018)
-  + Insertion Transformer: Flexible Sequence Generation via Insertion Operations (Stern et al. 2019)
-  + Mask-Predict: Parallel Decoding of Conditional Masked Language Models (Ghazvininejad et al., 2019)
-  + [Levenshtein Transformer (Gu et al., 2019)](examples/nonautoregressive_translation/README.md)
-* **Finetuning**
-  + [Better Fine-Tuning by Reducing Representational Collapse (Aghajanyan et al. 2020)](examples/rxf/README.md)
-
-</p></details>
-
-### What's New:
-* May 2023 [Released models for Scaling Speech Technology to 1,000+ Languages  (Pratap, et al., 2023)](examples/mms/README.md)
-* June 2022 [Released code for wav2vec-U 2.0 from Towards End-to-end Unsupervised Speech Recognition (Liu, et al., 2022)](examples/wav2vec/unsupervised/README.md)
-* May 2022 [Integration with xFormers](https://github.com/facebookresearch/xformers)
-* December 2021 [Released Direct speech-to-speech translation code](examples/speech_to_speech/README.md)
-* October 2021 [Released VideoCLIP and VLM models](examples/MMPT/README.md)
-* October 2021 [Released multilingual finetuned XLSR-53 model](examples/wav2vec/README.md)
-* September 2021 [`master` branch renamed to `main`](https://github.com/github/renaming).
-* July 2021 [Released DrNMT code](examples/discriminative_reranking_nmt/README.md)
-* July 2021 [Released Robust wav2vec 2.0 model](examples/wav2vec/README.md)
-* June 2021 [Released XLMR-XL and XLMR-XXL models](examples/xlmr/README.md)
-* May 2021 [Released Unsupervised Speech Recognition code](examples/wav2vec/unsupervised/README.md)
-* March 2021 [Added full parameter and optimizer state sharding + CPU offloading](examples/fully_sharded_data_parallel/README.md)
-* February 2021 [Added LASER training code](examples/laser/README.md)
-* December 2020: [Added Adaptive Attention Span code](examples/adaptive_span/README.md)
-* December 2020: [GottBERT model and code released](examples/gottbert/README.md)
-* November 2020: Adopted the [Hydra](https://github.com/facebookresearch/hydra) configuration framework
-  * [see documentation explaining how to use it for new and existing projects](docs/hydra_integration.md)
-* November 2020: [fairseq 0.10.0 released](https://github.com/pytorch/fairseq/releases/tag/v0.10.0)
-* October 2020: [Added R3F/R4F (Better Fine-Tuning) code](examples/rxf/README.md)
-* October 2020: [Deep Transformer with Latent Depth code released](examples/latent_depth/README.md)
-* October 2020: [Added CRISS models and code](examples/criss/README.md)
-
-<details><summary>Previous updates</summary><p>
-
-* September 2020: [Added Linformer code](examples/linformer/README.md)
-* September 2020: [Added pointer-generator networks](examples/pointer_generator/README.md)
-* August 2020: [Added lexically constrained decoding](examples/constrained_decoding/README.md)
-* August 2020: [wav2vec2 models and code released](examples/wav2vec/README.md)
-* July 2020: [Unsupervised Quality Estimation code released](examples/unsupervised_quality_estimation/README.md)
-* May 2020: [Follow fairseq on Twitter](https://twitter.com/fairseq)
-* April 2020: [Monotonic Multihead Attention code released](examples/simultaneous_translation/README.md)
-* April 2020: [Quant-Noise code released](examples/quant_noise/README.md)
-* April 2020: [Initial model parallel support and 11B parameters unidirectional LM released](examples/megatron_11b/README.md)
-* March 2020: [Byte-level BPE code released](examples/byte_level_bpe/README.md)
-* February 2020: [mBART model and code released](examples/mbart/README.md)
-* February 2020: [Added tutorial for back-translation](https://github.com/pytorch/fairseq/tree/main/examples/backtranslation#training-your-own-model-wmt18-english-german)
-* December 2019: [fairseq 0.9.0 released](https://github.com/pytorch/fairseq/releases/tag/v0.9.0)
-* November 2019: [VizSeq released (a visual analysis toolkit for evaluating fairseq models)](https://facebookresearch.github.io/vizseq/docs/getting_started/fairseq_example)
-* November 2019: [CamemBERT model and code released](examples/camembert/README.md)
-* November 2019: [BART model and code released](examples/bart/README.md)
-* November 2019: [XLM-R models and code released](examples/xlmr/README.md)
-* September 2019: [Nonautoregressive translation code released](examples/nonautoregressive_translation/README.md)
-* August 2019: [WMT'19 models released](examples/wmt19/README.md)
-* July 2019: fairseq relicensed under MIT license
-* July 2019: [RoBERTa models and code released](examples/roberta/README.md)
-* June 2019: [wav2vec models and code released](examples/wav2vec/README.md)
-
-</p></details>
-
-### Features:
-
-* multi-GPU training on one machine or across multiple machines (data and model parallel)
-* fast generation on both CPU and GPU with multiple search algorithms implemented:
-  + beam search
-  + Diverse Beam Search ([Vijayakumar et al., 2016](https://arxiv.org/abs/1610.02424))
-  + sampling (unconstrained, top-k and top-p/nucleus)
-  + [lexically constrained decoding](examples/constrained_decoding/README.md) (Post & Vilar, 2018)
-* [gradient accumulation](https://fairseq.readthedocs.io/en/latest/getting_started.html#large-mini-batch-training-with-delayed-updates) enables training with large mini-batches even on a single GPU
-* [mixed precision training](https://fairseq.readthedocs.io/en/latest/getting_started.html#training-with-half-precision-floating-point-fp16) (trains faster with less GPU memory on [NVIDIA tensor cores](https://developer.nvidia.com/tensor-cores))
-* [extensible](https://fairseq.readthedocs.io/en/latest/overview.html): easily register new models, criterions, tasks, optimizers and learning rate schedulers
-* [flexible configuration](docs/hydra_integration.md) based on [Hydra](https://github.com/facebookresearch/hydra) allowing a combination of code, command-line and file based configuration
-* [full parameter and optimizer state sharding](examples/fully_sharded_data_parallel/README.md)
-* [offloading parameters to CPU](examples/fully_sharded_data_parallel/README.md)
-
-We also provide [pre-trained models for translation and language modeling](#pre-trained-models-and-examples)
-with a convenient `torch.hub` interface:
-
-``` python
-en2de = torch.hub.load('pytorch/fairseq', 'transformer.wmt19.en-de.single_model')
-en2de.translate('Hello world', beam=5)
-# 'Hallo Welt'
-```
-
-See the PyTorch Hub tutorials for [translation](https://pytorch.org/hub/pytorch_fairseq_translation/)
-and [RoBERTa](https://pytorch.org/hub/pytorch_fairseq_roberta/) for more examples.
-
-# Requirements and Installation
-
-* [PyTorch](http://pytorch.org/) version >= 1.10.0
-* Python version >= 3.8
-* For training new models, you'll also need an NVIDIA GPU and [NCCL](https://github.com/NVIDIA/nccl)
-* **To install fairseq** and develop locally:
-
-``` bash
-git clone https://github.com/pytorch/fairseq
-cd fairseq
-pip install --editable ./
-
-# on MacOS:
-# CFLAGS="-stdlib=libc++" pip install --editable ./
-
-# to install the latest stable release (0.10.x)
-# pip install fairseq
-```
-
-* **For faster training** install NVIDIA's [apex](https://github.com/NVIDIA/apex) library:
-
-``` bash
-git clone https://github.com/NVIDIA/apex
-cd apex
-pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" \
-  --global-option="--deprecated_fused_adam" --global-option="--xentropy" \
-  --global-option="--fast_multihead_attn" ./
-```
-
-* **For large datasets** install [PyArrow](https://arrow.apache.org/docs/python/install.html#using-pip): `pip install pyarrow`
-* If you use Docker make sure to increase the shared memory size either with `--ipc=host` or `--shm-size`
- as command line options to `nvidia-docker run` .
-
-# Getting Started
-
-The [full documentation](https://fairseq.readthedocs.io/) contains instructions
-for getting started, training new models and extending fairseq with new model
-types and tasks.
-
-# Pre-trained models and examples
-
-We provide pre-trained models and pre-processed, binarized test sets for several tasks listed below,
-as well as example training and evaluation commands.
-
-* [Translation](examples/translation/README.md): convolutional and transformer models are available
-* [Language Modeling](examples/language_model/README.md): convolutional and transformer models are available
-
-We also have more detailed READMEs to reproduce results from specific papers:
-
-* [XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale (Babu et al., 2021)](examples/wav2vec/xlsr/README.md)
-* [Cross-lingual Retrieval for Iterative Self-Supervised Training (Tran et al., 2020)](examples/criss/README.md)
-* [wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations (Baevski et al., 2020)](examples/wav2vec/README.md)
-* [Unsupervised Quality Estimation for Neural Machine Translation (Fomicheva et al., 2020)](examples/unsupervised_quality_estimation/README.md)
-* [Training with Quantization Noise for Extreme Model Compression ({Fan*, Stock*} et al., 2020)](examples/quant_noise/README.md)
-* [Neural Machine Translation with Byte-Level Subwords (Wang et al., 2020)](examples/byte_level_bpe/README.md)
-* [Multilingual Denoising Pre-training for Neural Machine Translation (Liu et at., 2020)](examples/mbart/README.md)
-* [Reducing Transformer Depth on Demand with Structured Dropout (Fan et al., 2019)](examples/layerdrop/README.md)
-* [Jointly Learning to Align and Translate with Transformer Models (Garg et al., 2019)](examples/joint_alignment_translation/README.md)
-* [Levenshtein Transformer (Gu et al., 2019)](examples/nonautoregressive_translation/README.md)
-* [Facebook FAIR's WMT19 News Translation Task Submission (Ng et al., 2019)](examples/wmt19/README.md)
-* [RoBERTa: A Robustly Optimized BERT Pretraining Approach (Liu et al., 2019)](examples/roberta/README.md)
-* [wav2vec: Unsupervised Pre-training for Speech Recognition (Schneider et al., 2019)](examples/wav2vec/README.md)
-* [Mixture Models for Diverse Machine Translation: Tricks of the Trade (Shen et al., 2019)](examples/translation_moe/README.md)
-* [Pay Less Attention with Lightweight and Dynamic Convolutions (Wu et al., 2019)](examples/pay_less_attention_paper/README.md)
-* [Understanding Back-Translation at Scale (Edunov et al., 2018)](examples/backtranslation/README.md)
-* [Classical Structured Prediction Losses for Sequence to Sequence Learning (Edunov et al., 2018)](https://github.com/pytorch/fairseq/tree/classic_seqlevel)
-* [Hierarchical Neural Story Generation (Fan et al., 2018)](examples/stories/README.md)
-* [Scaling Neural Machine Translation (Ott et al., 2018)](examples/scaling_nmt/README.md)
-* [Convolutional Sequence to Sequence Learning (Gehring et al., 2017)](examples/conv_seq2seq/README.md)
-* [Language Modeling with Gated Convolutional Networks (Dauphin et al., 2017)](examples/language_model/README.conv.md)
-
-# Join the fairseq community
-
-* Twitter: https://twitter.com/fairseq
-* Facebook page: https://www.facebook.com/groups/fairseq.users
-* Google group: https://groups.google.com/forum/#!forum/fairseq-users
-
-# License
-
-fairseq(-py) is MIT-licensed.
-The license applies to the pre-trained models as well.
-
-# Citation
-
-Please cite as:
-
-``` bibtex
-@inproceedings{ott2019fairseq,
-  title = {fairseq: A Fast, Extensible Toolkit for Sequence Modeling},
-  author = {Myle Ott and Sergey Edunov and Alexei Baevski and Angela Fan and Sam Gross and Nathan Ng and David Grangier and Michael Auli},
-  booktitle = {Proceedings of NAACL-HLT 2019: Demonstrations},
-  year = {2019},
+```{bibtex}
+@article{pires2023learning,
+  title={Learning language-specific layers for multilingual machine translation},
+  author={Pires, Telmo Pessoa and Schmidt, Robin M and Liao, Yi-Hsiu and Peitz, Stephan},
+  journal={arXiv preprint arXiv:2305.02665},
+  year={2023}
 }
 ```
+
+In a most extreme straight forward approach one would train a multilingual model with non-shared encoders and decoders. However this does not scale well 
+for adding more language pairs, in terms of model capacity and slow inference.
+Thus, the authors propose the use of Language-Specific Transformer Layers (**LSL**s), especially in the encoder block, in order to gain in model capacity and
+computation time.
+The idea of the proposed LSL architecture is to have share large parts of the encoder and the whole decoder across language and only introduce language specificity when needed. This is achieve by replacing an otherwise shared Transformer block with an LSL which takes the given language pair into account.
+
+In my little case study provide all necessary scripts from fetching the data to generating from the trained LSL model. The code can be found in the `mmtl`folder.
+
+The following scripts are tooled via a .env file, I include a template so that it can be fed with the environment variables needed by the scripts.
+
+## Data preparation
+
+For training I will stick to the tatoeba and wmt21 dataset, i.e., as opposed to the original publication I will omit the CCMatrix and Opus-101 dataset.
+For validation and test I will use the Flores 200 dataset, analogously to the used Flores 101 dataset used in the original publication.
+
+### Fetching raw data
+
+For each dataset there is a script in `scripts/raw_data`. I downloaded the Flores dataset manually, tatoeaba and wmt21 are fetched directly from within the scripts.
+Due to inconsistent naming conventions these scripts also bring everything to a consistent
+format, which is given as `dataset.lang_pair.src` and `dataset.lang_pair.tgt`, e.g. 
+`wmt21.en-de.de`.
+
+Furthermore, I restrict to the language pairs (always both translate directions): `de-fr, en-de, en-ja, zh-en`.
+
+### Training Tokenizer
+
+Following the suggestions of the publication, I train a sentencepiece tokenizer on tatoeba and
+wmt21, where I balance the huge tatoeba set in step to subsamples of 1.5M sentences.
+This subsampling is performed in `scripts/train_encode/subsample.sh`.
+The subsampling  relies on the nice subsample CLI https://github.com/dcjones/subsample/tree/master 
+
+The tokenizer is trained on 16 threads via `scripts/train_encode/train_encode.sh` providing us
+with `MMTL_spm.model` and `MMTL_spm.vocab`. The vocab is directly converted to a valid fairseq dict.
+
+### Encoding with trained tokenizer
+
+With the trained tokenizer I then encoded all datasets via `scripts/infer_encode/multi_infer_encode.sh`
+
+### Preparing for fairseq
+
+Now we need to binarize the tokens in order be compatible with fairseq training. This is done
+via classic fairseq preprocessing in `scripts/prep/multi_fairseq-prep.sh`.
+Note that here it is crucial to keep shared dictionaries. This is why we manually need to handle
+seperate cases depending on the languages already processed.
+
+## Training MMTL model
+
+The MMTL model is trained in using fairaseq in `scripts/train/train.sh`. Concerning hyperparameters I follow the
+author's choices.
+The introduction of the `LanguageSpecificEncoderLayer` to the fairseq code is only briefly explained in the manuscript, so I provide my step by approach here.
+
+First we define the class in `fairseq/modules/transformer_layer.py` by adding the code provided by the authors in Listing 1:
+
+```python
+class LanguageSpecificEncoderLayer(nn.Module):
+    def __init__(self, args, layer=0):
+        super().__init__()
+        self.index_language = args.language_specific_layers[layer]
+        all_languages = sorted(set(self.get_lang(lp) for lp in args.lang_pairs))
+        # self.models = nn.ModuleDict({lang: TransformerEncoderLayer(args, layer) for lang in all_languages})
+        self.models = nn.ModuleDict({lang: TransformerEncoderLayer(args) for lang in all_languages})
+
+    def get_lang(self, lang_pair):
+        if self.index_language == "src":
+            return lang_pair.split("-")[0]
+        elif self.index_language == "tgt":
+            return lang_pair.split("-")[1]
+        else:
+            raise ValueError(f"Invalid language {self.index_language}")
+    
+    def upgrade_state_dict_named(self, state_dict, name):
+        """
+        Rename layer norm states from `...layer_norms.0.weight` to
+        `...self_attn_layer_norm.weight` and `...layer_norms.1.weight` to
+        `...final_layer_norm.weight`
+        """
+        layer_norm_map = {"0": "self_attn_layer_norm", "1": "final_layer_norm"}
+        for old, new in layer_norm_map.items():
+            for m in ("weight", "bias"):
+                k = "{}.layer_norms.{}.{}".format(name, old, m)
+                if k in state_dict:
+                    state_dict["{}.{}.{}".format(name, new, m)] = state_dict[k]
+                    del state_dict[k]
+    
+    def forward(self, x, encoder_padding_mask, attn_mask: Optional[Tensor] = None):
+        # self.lang_pair is set dynamically from outside the module.
+        print(f"Using Language specific encoder for {self.index_language} lang {self.get_lang(self.lang_pair)} of pair {self.lang_pair}")
+        return self.models[self.get_lang(self.lang_pair)].forward(x, encoder_padding_mask, attn_mask)
+```
+
+A few notes here: The method `upgrade_state_dict_named` is just a copy of the according method in `TransformerEncoderLayerBase` and is needed for the proper handling of the state dict downstream.
+I do not see the necessity of the `layer` parameter to be passed to the `TransformerEncoderLayer` so
+I omit it in my implementation.
+
+Next, in order to allow the new layer to be built into the encoder block we modify `fairseq/models/transformer/transformer_encoder.py` to by adding the following method to `TransformerEncoderBase`
+
+```python
+    def build_language_specific_encoder_layer(self, cfg, layer):
+        layer = transformer_layer.LanguageSpecificEncoderLayer(
+            cfg, layer
+        )
+        checkpoint = cfg.checkpoint_activations
+        if checkpoint:
+            offload_to_cpu = cfg.offload_activations
+            layer = checkpoint_wrapper(layer, offload_to_cpu=offload_to_cpu)
+        # if we are checkpointing, enforce that FSDP always wraps the
+        # checkpointed layer, regardless of layer size
+        min_params_to_wrap = cfg.min_params_to_wrap if not checkpoint else 0
+        layer = fsdp_wrap(layer, min_num_params=min_params_to_wrap)
+        return layer
+```
+
+Note that here the layer parameter is indeed crucial in order to control downstream whether a src or tgt indexed
+layer is desired.
+
+Next, in the same module, we need to replace the concatenation of Transformer layers
+
+```python    
+    self.layers.extend(
+        [self.build_encoder_layer(cfg) for i in range(cfg.encoder.layers)]
+    )
+```
+
+with the LSLs at the desired positions
+```python
+    for i in range(cfg.encoder.layers):
+        if i in [3, 4]:
+            self.layers.append(self.build_language_specific_encoder_layer(cfg, i))
+        elif i in [13, 14, 15]:
+            self.layers.append(self.build_language_specific_encoder_layer(cfg, i))
+        else:
+            self.layers.append(self.build_encoder_layer(cfg))
+            
+    self.layers.extend(
+        [self.build_encoder_layer(cfg) for i in range(cfg.encoder.layers)]
+    )
+```
+
+Here I just hard coded the optimal configuration found by the author's in their architecture search, i.e.,
+all layers except 3, 4, 13, 14, 15 are shared across languages.
+Of course for future improvements this can be transferred to a more elegant approach.
+
+Next, as also described by the authors, the optimal architecture comprises layers 3 and 4 to be srs indexed and
+13, 14, 15 to be tgt indexed. Considering the implementation of `LanguageSpecificEncoderLayer` this is achieved 
+in `args.language_specific_layers[layer]` by configuring the respective parameter.
+This is done by adding to the transformer config under `fairseq/models/transformer/transformer_config.py`
+
+```python
+    language_specific_layers: Optional[List[str]] = field(
+        default_factory=lambda: ['src'] * 8 + ['tgt'] * 8,
+        metadata={
+            "help": "A list of the form ['src', 'src', ..., 'tgt', 'tgt']",
+        },
+    )
+```
+
+Here I again hard coded the optimal configuration into the default argument, which exactly achieves that the first layers are src indexed and the second half of layers is tgt indexed.
+
+Now the main point is that, even though we share all encoders and decoders across all language pairs, we need
+to make language specific layers actually kick in correctly during training and inference. As noted by the authors this is achieved by dynamically providing the `lang_pair` attribute to the `LanguageSpecificEncoderLayer`
+via 
+
+```python
+    LanguageSpecificEncoderLayer.lang_pair = property(lambda self: lang_pair)
+```
+
+The art consists now in finding the correct places in the massive fairseq codebase. However, conceptually it is clear that we need to perform this modification after the shared `MultilingualTransformer` model is instantiated both in training and inference.
+The training is abstracted in the what fairseq denotes as tasks. Thus, in `fairseq/tasks/multilingual_translation.py` in the `train_step` we need to provide above dynamic definition in the
+language specific loop
+
+```python
+    for idx, lang_pair in enumerate(curr_lang_pairs):
+        LanguageSpecificEncoderLayer.lang_pair = property(lambda self: lang_pair)
+```
+
+The exact same modification needs also to be done in `valid_step`.
+
+Finally, in order to arrive at the correct application of the trained model during generation we also need to modify the `_main` in `fairseq/fairseq_cli/generate.py`. The generation is performed for a single `lang_pair`
+so naturally after this `lang_pair`is determined we introduce the dynamic attribute before the model is loaded.
+
+```python
+    lang_pair = cfg.task.source_lang + "-" + cfg.task.target_lang
+    LanguageSpecificEncoderLayer.lang_pair = property(lambda self: lang_pair)
+    models, saved_cfg = checkpoint_utils.load_model_ensemble(
+        utils.split_paths(cfg.common_eval.path),
+        arg_overrides=overrides,
+        task=task,
+        suffix=cfg.checkpoint.checkpoint_suffix,
+        strict=(cfg.checkpoint.checkpoint_shard_count == 1),
+        num_shards=cfg.checkpoint.checkpoint_shard_count,
+    )
+```
+
+After applying these changes we are in the position to train and generate from the model.
+The generation on the flores test set is done in `scripts/generate/generate.sh`.
+Note that even though the generation is done one lang pair and one direction at a time we need to provide
+the lang pairs in order to indicate which pairs were used during training.
+

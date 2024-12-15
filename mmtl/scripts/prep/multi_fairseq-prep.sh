@@ -11,5 +11,5 @@ do
     echo "Preprocessing for $i"
     src=$(echo $i | cut -d'-' -f1)
     tgt=$(echo $i | cut -d'-' -f2)
-    bash $script 'multi_spm' 'wmt21' $src $tgt
+    bash $script 'wmt21' $src $tgt
 done
