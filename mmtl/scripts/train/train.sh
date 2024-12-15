@@ -3,10 +3,10 @@ source .env
 data=$BASE/data/bin
 mkdir $CHECKPOINT
 
-CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES fairseq-train $data/wmt21 \
+CUDA_VISIBLE_DEVICES=1,2 fairseq-train $data/wmt21 \
     --arch multilingual_transformer \
     --task multilingual_translation \
-    --lang-pairs "de-fr,fr-de,en-ja,ja-en,zh-en,en-zh" \
+    --lang-pairs "de-fr,fr-de,en-de,de-en,en-ja,ja-en,zh-en,en-zh" \
     --criterion label_smoothed_cross_entropy \
     --label-smoothing 0.1 \
     --lr 4e-4 \
@@ -26,7 +26,7 @@ CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES fairseq-train $data/wmt21 \
     --decoder-embed-dim 512 \
     --max-update 150000 \
     --max-epoch 100 \
-    --distributed-world-size $DISTRIBUTED_WORLD_SIZE \
+    --distributed-world-size 1 \
     --distributed-port 54186 \
     --fp16 \
     --max-source-positions 10000 \

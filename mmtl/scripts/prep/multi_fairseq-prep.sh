@@ -1,13 +1,13 @@
 source .env
 
 script="$BASE/scripts/prep/fairseq-prep.sh"
-declare -a pairs=('de-fr' 'fr-de'
-                'en-ja' 'ja-en'
-                'zh-en' 'en-zh')
 # declare -a pairs=('de-fr' 'fr-de'
-#                 'en-de' 'de-en'
 #                 'en-ja' 'ja-en'
 #                 'zh-en' 'en-zh')
+declare -a pairs=('de-fr' 'fr-de'
+                'en-de' 'de-en'
+                'en-ja' 'ja-en'
+                'zh-en' 'en-zh')
 
 for i in "${pairs[@]}"
 do
@@ -25,5 +25,6 @@ done
 for i in "${lang[@]}"
 do
     mv $BASE/data/bin/wmt21/dict_${i}_tmp.txt $BASE/data/bin/wmt21/dict.${i}.txt
-    sort -u $BASE/data/bin/wmt21/dict.${i}.txt > $BASE/data/bin/wmt21/dict.${i}.txt
+    sort -u -k1,1 $BASE/data/bin/wmt21/dict.${i}.txt > $BASE/data/bin/wmt21/dict.${i}_sorted.txt
+    mv $BASE/data/bin/wmt21/dict.${i}_sorted.txt $BASE/data/bin/wmt21/dict.${i}.txt
 done
