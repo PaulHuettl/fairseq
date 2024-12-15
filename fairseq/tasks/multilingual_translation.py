@@ -23,6 +23,8 @@ from fairseq.tasks.translation import load_langpair_dataset
 
 from . import LegacyFairseqTask, register_task
 
+from fairseq.modules.transformer_layer import LanguageSpecificEncoderLayer
+
 
 logger = logging.getLogger(__name__)
 
@@ -349,7 +351,7 @@ class MultilingualTranslationTask(LegacyFairseqTask):
         ]
 
         for idx, lang_pair in enumerate(curr_lang_pairs):
-
+            LanguageSpecificEncoderLayer.lang_pair = property(lambda self: lang_pair)
             def maybe_no_sync():
                 if (
                     self.args.distributed_world_size > 1
@@ -388,6 +390,7 @@ class MultilingualTranslationTask(LegacyFairseqTask):
 
             agg_loss, agg_sample_size, agg_logging_output = 0.0, 0.0, defaultdict(float)
             for lang_pair in self.eval_lang_pairs:
+                LanguageSpecificEncoderLayer.lang_pair = property(lambda self: lang_pair)
                 if (
                     lang_pair not in sample
                     or sample[lang_pair] is None

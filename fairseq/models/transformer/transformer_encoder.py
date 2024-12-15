@@ -92,9 +92,16 @@ class TransformerEncoderBase(FairseqEncoder):
             self.layers = LayerDropModuleList(p=self.encoder_layerdrop)
         else:
             self.layers = nn.ModuleList([])
-        self.layers.extend(
-            [self.build_encoder_layer(cfg) for i in range(cfg.encoder.layers)]
-        )
+        for i in range(cfg.encoder.layers):
+            if i in [3, 4]:
+                self.layers.append(self.build_language_specific_encoder_layer(cfg, i))
+            elif i in [13, 14, 15]:
+                self.layers.append(self.build_language_specific_encoder_layer(cfg, i))
+            else:
+                self.layers.append(self.build_encoder_layer(cfg))
+        # self.layers.extend(
+        #     [self.build_encoder_layer(cfg) for i in range(cfg.encoder.layers)]
+        # )
         self.num_layers = len(self.layers)
 
         if cfg.encoder.normalize_before:
@@ -105,6 +112,22 @@ class TransformerEncoderBase(FairseqEncoder):
     def build_encoder_layer(self, cfg):
         layer = transformer_layer.TransformerEncoderLayerBase(
             cfg, return_fc=self.return_fc
+        )
+        checkpoint = cfg.checkpoint_activations
+        if checkpoint:
+            offload_to_cpu = cfg.offload_activations
+            layer = checkpoint_wrapper(layer, offload_to_cpu=offload_to_cpu)
+        # if we are checkpointing, enforce that FSDP always wraps the
+        # checkpointed layer, regardless of layer size
+        min_params_to_wrap = cfg.min_params_to_wrap if not checkpoint else 0
+        layer = fsdp_wrap(layer, min_num_params=min_params_to_wrap)
+        return layer
+        
+    def build_language_specific_encoder_layer(self, cfg, layer):
+        # lang_pair = self.lang_pair
+        # transformer_layer.LanguageSpecificEncoderLayer.lang_pair = property(lambda self: lang_pair)
+        layer = transformer_layer.LanguageSpecificEncoderLayer(
+            cfg, layer
         )
         checkpoint = cfg.checkpoint_activations
         if checkpoint:

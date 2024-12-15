@@ -224,6 +224,41 @@ class TransformerEncoderLayerBase(nn.Module):
         if self.return_fc and not torch.jit.is_scripting():
             return x, fc_result
         return x
+    
+class LanguageSpecificEncoderLayer(nn.Module):
+    def __init__(self, args, layer=0):
+        super().__init__()
+        self.index_language = args.language_specific_layers[layer]
+        all_languages = sorted(set(self.get_lang(lp) for lp in args.lang_pairs))
+        # self.models = nn.ModuleDict({lang: TransformerEncoderLayer(args, layer) for lang in all_languages})
+        self.models = nn.ModuleDict({lang: TransformerEncoderLayer(args) for lang in all_languages})
+
+    def get_lang(self, lang_pair):
+        if self.index_language == "src":
+            return lang_pair.split("-")[0]
+        elif self.index_language == "tgt":
+            return lang_pair.split("-")[1]
+        else:
+            raise ValueError(f"Invalid language {self.index_language}")
+    
+    def upgrade_state_dict_named(self, state_dict, name):
+        """
+        Rename layer norm states from `...layer_norms.0.weight` to
+        `...self_attn_layer_norm.weight` and `...layer_norms.1.weight` to
+        `...final_layer_norm.weight`
+        """
+        layer_norm_map = {"0": "self_attn_layer_norm", "1": "final_layer_norm"}
+        for old, new in layer_norm_map.items():
+            for m in ("weight", "bias"):
+                k = "{}.layer_norms.{}.{}".format(name, old, m)
+                if k in state_dict:
+                    state_dict["{}.{}.{}".format(name, new, m)] = state_dict[k]
+                    del state_dict[k]
+    
+    def forward(self, x, encoder_padding_mask, attn_mask: Optional[Tensor] = None):
+        # self.lang_pair is set dynamically from outside the module.
+        print(f"Using Language specific encoder for {self.index_language} lang {self.get_lang(self.lang_pair)} of pair {self.lang_pair}")
+        return self.models[self.get_lang(self.lang_pair)].forward(x, encoder_padding_mask, attn_mask)
 
 
 # backward compatible with the legacy argparse format

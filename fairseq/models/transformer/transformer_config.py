@@ -237,6 +237,14 @@ class TransformerConfig(FairseqDataclass):
         metadata={"help": "don't add an extra layernorm after the last decoder block"},
     )
 
+    # TODO: this is hacky
+    language_specific_layers: Optional[List[str]] = field(
+        default_factory=lambda: ['src'] * 8 + ['tgt'] * 8,
+        metadata={
+            "help": "A list of the form ['src', 'src', ..., 'tgt', 'tgt']",
+        },
+    )
+
     # We need to make this hierarchical dataclass like the flat namespace
     # __getattr__ and __setattr__ here allow backward compatibility
     # for subclasses of Transformer(Legacy) that depend on read/write on

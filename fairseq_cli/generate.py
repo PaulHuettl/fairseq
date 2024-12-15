@@ -23,6 +23,8 @@ from fairseq import checkpoint_utils, options, scoring, tasks, utils
 from fairseq.dataclass.utils import convert_namespace_to_omegaconf
 from fairseq.logging import progress_bar
 from fairseq.logging.meters import StopwatchMeter, TimeMeter
+from fairseq.modules.transformer_layer import LanguageSpecificEncoderLayer
+
 
 
 def main(cfg: DictConfig):
@@ -93,6 +95,8 @@ def _main(cfg: DictConfig, output_file):
 
     # Load ensemble
     logger.info("loading model(s) from {}".format(cfg.common_eval.path))
+    lang_pair = cfg.task.source_lang + "-" + cfg.task.target_lang
+    LanguageSpecificEncoderLayer.lang_pair = property(lambda self: lang_pair)
     models, saved_cfg = checkpoint_utils.load_model_ensemble(
         utils.split_paths(cfg.common_eval.path),
         arg_overrides=overrides,
