@@ -3,10 +3,10 @@ source .env
 data=$BASE/data/bin
 mkdir $CHECKPOINT
 
-CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES fairseq-train $data/wmt21 $data/tatoeba \
+CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES fairseq-train $data/wmt21 \
     --arch multilingual_transformer \
     --task multilingual_translation \
-    --lang-pairs "de-fr,fr-de,en-de,de-en,en-ja,ja-en,zh-en,en-zh" \
+    --lang-pairs "de-fr,fr-de,en-ja,ja-en,zh-en,en-zh" \
     --criterion label_smoothed_cross_entropy \
     --label-smoothing 0.1 \
     --lr 4e-4 \

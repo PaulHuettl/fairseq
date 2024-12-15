@@ -1,3 +1,5 @@
+source .env
+
 data="$BASE/data"
 dataset=$1
 src=$2
@@ -15,9 +17,9 @@ if [ -f  "$dataset_bin/dict.$src.txt" ] && [ -f  "$dataset_bin/dict.$tgt.txt" ];
 then
     echo "Both dicts exist"
     fairseq-preprocess \
-        --trainpref "$dataset_enc/$dataset.$src-$tgt.spm" \
-        --validpref "$data/enc/flores-dev/flores-dev.$src-$tgt.spm" \
-        --testpref "$data/enc/flores-devtest/flores-devtest.$src-$tgt.spm" \
+        --trainpref "$dataset_enc/train.$src-$tgt.spm" \
+        --validpref "$data/enc/flores-dev/validate.$src-$tgt.spm" \
+        --testpref "$data/enc/flores-devtest/test.$src-$tgt.spm" \
         --destdir $dataset_bin \
         --srcdict "$dataset_bin/dict.$src.txt"\
         --tgtdict "$dataset_bin/dict.$tgt.txt"\
@@ -30,9 +32,9 @@ else
     then
         echo "Src dicts exist"
         fairseq-preprocess \
-            --trainpref "$dataset_enc/$dataset.$src-$tgt.spm" \
-            --validpref "$data/enc/flores-dev/flores-dev.$src-$tgt.spm" \
-            --testpref "$data/enc/flores-devtest/flores-devtest.$src-$tgt.spm" \
+            --trainpref "$dataset_enc/train.$src-$tgt.spm" \
+            --validpref "$data/enc/flores-dev/validate.$src-$tgt.spm" \
+            --testpref "$data/enc/flores-devtest/test.$src-$tgt.spm" \
             --destdir $dataset_bin \
             --srcdict "$dataset_bin/dict.$src.txt"\
             --source-lang $src \
@@ -44,9 +46,9 @@ else
         then
             echo "Tgt dicts exist"
             fairseq-preprocess \
-                --trainpref "$dataset_enc/$dataset.$src-$tgt.spm" \
-                --validpref "$data/enc/flores-dev/flores-dev.$src-$tgt.spm" \
-                --testpref "$data/enc/flores-devtest/flores-devtest.$src-$tgt.spm" \
+                --trainpref "$dataset_enc/train.$src-$tgt.spm" \
+                --validpref "$data/enc/flores-dev/validate.$src-$tgt.spm" \
+                --testpref "$data/enc/flores-devtest/test.$src-$tgt.spm" \
                 --destdir $dataset_bin \
                 --tgtdict "$dataset_bin/dict.$tgt.txt"\
                 --source-lang $src \
@@ -58,9 +60,9 @@ else
         then
             echo "No dicts exist, computing them anew"
             fairseq-preprocess \
-                --trainpref "$dataset_enc/$dataset.$src-$tgt.spm" \
-                --validpref "$data/enc/flores-dev/flores-dev.$src-$tgt.spm" \
-                --testpref "$data/enc/flores-devtest/flores-devtest.$src-$tgt.spm" \
+                --trainpref "$dataset_enc/train.$src-$tgt.spm" \
+                --validpref "$data/enc/flores-dev/validate.$src-$tgt.spm" \
+                --testpref "$data/enc/flores-devtest/test.$src-$tgt.spm" \
                 --destdir $dataset_bin \
                 --source-lang $src \
                 --target-lang $tgt \
