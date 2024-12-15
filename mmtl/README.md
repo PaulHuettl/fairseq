@@ -19,6 +19,8 @@ The idea of the proposed LSL architecture is to have share large parts of the en
 
 In my little case study provide all necessary scripts from fetching the data to generating from the trained LSL model.
 
+The following scripts are tooled via a .env file, I include a template so that it can befed with the environment variables needed by the scripts.
+
 ## Data preparation
 
 For training I will stick to the tatoeba and wmt21 dataset, i.e., as opposed to the original publication I will omit the CCMatrix and Opus-101 dataset.
