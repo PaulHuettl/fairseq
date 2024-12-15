@@ -33,4 +33,4 @@ CUDA_VISIBLE_DEVICES=1,2 fairseq-train $data/wmt21 \
     --max-target-positions 10000 \
     --save-dir $CHECKPOINT \
     --seed 1 \
-    --save-interval 1
+    --save-interval 20
