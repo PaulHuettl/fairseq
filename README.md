@@ -28,7 +28,7 @@ For validation and test I will use the Flores 200 dataset, analogously to the us
 
 ### Fetching raw data
 
-For each dataset there is a script in `scripts/raw_data`. I downloaded the Flores dataset manually, tatoeaba and wmt21 are fetched directly from within the scripts.
+For each dataset there is a script in `mmtl/scripts/raw_data`. I downloaded the Flores dataset manually, tatoeaba and wmt21 are fetched directly from within the scripts.
 Due to inconsistent naming conventions these scripts also bring everything to a consistent
 format, which is given as `dataset.lang_pair.src` and `dataset.lang_pair.tgt`, e.g. 
 `wmt21.en-de.de`.
@@ -39,26 +39,26 @@ Furthermore, I restrict to the language pairs (always both translate directions)
 
 Following the suggestions of the publication, I train a sentencepiece tokenizer on tatoeba and
 wmt21, where I balance the huge tatoeba set in step to subsamples of 1.5M sentences.
-This subsampling is performed in `scripts/train_encode/subsample.sh`.
+This subsampling is performed in `mmtl/scripts/train_encode/subsample.sh`.
 The subsampling  relies on the nice subsample CLI https://github.com/dcjones/subsample/tree/master 
 
-The tokenizer is trained on 16 threads via `scripts/train_encode/train_encode.sh` providing us
+The tokenizer is trained on 16 threads via `mmtl/scripts/train_encode/train_encode.sh` providing us
 with `MMTL_spm.model` and `MMTL_spm.vocab`. The vocab is directly converted to a valid fairseq dict.
 
 ### Encoding with trained tokenizer
 
-With the trained tokenizer I then encoded all datasets via `scripts/infer_encode/multi_infer_encode.sh`
+With the trained tokenizer I then encoded all datasets via `mmtl/scripts/infer_encode/multi_infer_encode.sh`
 
 ### Preparing for fairseq
 
 Now we need to binarize the tokens in order be compatible with fairseq training. This is done
-via classic fairseq preprocessing in `scripts/prep/multi_fairseq-prep.sh`.
+via classic fairseq preprocessing in `mmtl/scripts/prep/multi_fairseq-prep.sh`.
 Note that here it is crucial to keep shared dictionaries. This is why we manually need to handle
 seperate cases depending on the languages already processed.
 
 ## Training MMTL model
 
-The MMTL model is trained in using fairaseq in `scripts/train/train.sh`. Concerning hyperparameters I follow the
+The MMTL model is trained in using fairaseq in `mmtl/scripts/train/train.sh`. Concerning hyperparameters I follow the
 author's choices.
 The introduction of the `LanguageSpecificEncoderLayer` to the fairseq code is only briefly explained in the manuscript, so I provide my step by approach here.
 
@@ -205,7 +205,13 @@ so naturally after this `lang_pair`is determined we introduce the dynamic attrib
 ```
 
 After applying these changes we are in the position to train and generate from the model.
-The generation on the flores test set is done in `scripts/generate/generate.sh`.
+The generation on the flores test set is done in `mmtl/scripts/generate/generate.sh`.
 Note that even though the generation is done one lang pair and one direction at a time we need to provide
 the lang pairs in order to indicate which pairs were used during training.
+
+## Results
+
+Due to compute limitations I only trained on the wmt21 dataset in order to test my implementation of the LSL.
+Of course, due to its limited size wmt21 is not sufficient for training from scratch.
+This is also seen from the genenerate output in `mmtl/results/en-de.txt`.
 

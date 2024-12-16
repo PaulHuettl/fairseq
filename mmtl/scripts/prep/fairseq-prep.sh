@@ -26,7 +26,7 @@ then
         --source-lang $src \
         --target-lang $tgt \
         --bpe sentencepiece \
-        --workers 8 
+        --workers 50 
 else 
     if [ -f  "$dataset_bin/dict.$src.txt" ];
     then
@@ -40,7 +40,7 @@ else
             --source-lang $src \
             --target-lang $tgt \
             --bpe sentencepiece \
-            --workers 8 
+            --workers 50 
     else
         if [ -f  "$dataset_bin/dict.$tgt.txt" ];
         then
@@ -54,7 +54,7 @@ else
                 --source-lang $src \
                 --target-lang $tgt \
                 --bpe sentencepiece \
-                --workers 8 
+                --workers 50 
         fi
         if [ ! -f  "$dataset_bin/dict.$src.txt" ] && [ ! -f  "$dataset_bin/dict.$tgt.txt" ];
         then
@@ -67,7 +67,7 @@ else
                 --source-lang $src \
                 --target-lang $tgt \
                 --bpe sentencepiece \
-                --workers 8 
+                --workers 50
         fi
     fi
 fi
